@@ -1,5 +1,6 @@
-#Integrar consoles frontennd e backend para possíveis erros e melhorias futuras
-
+# Integrar consoles frontennd e backend para possíveis erros e melhorias futuras
+# Próxima feature -> Integrar menu bar lateral para gráficos e estátisticas
+ 
 ## expense-form e income form tem o mesmo useeffect 
 useEffect(() => {
     if (!getValues("date")) {
