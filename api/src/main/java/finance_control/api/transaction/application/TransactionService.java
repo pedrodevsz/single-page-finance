@@ -1,6 +1,11 @@
 package finance_control.api.transaction.application;
 
 import java.util.List;
+import java.util.UUID;
+
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,8 +35,7 @@ public class TransactionService {
                 request.category(),
                 request.transactionDate(),
                 request.paymentMethod(),
-                request.notes()
-        );
+                request.notes());
 
         Transaction savedTransaction = transactionRepository.save(transaction);
         return TransactionResponse.from(savedTransaction);
@@ -42,8 +46,7 @@ public class TransactionService {
         Sort sort = Sort.by(
                 Sort.Order.desc("transactionDate"),
                 Sort.Order.desc("createdAt"),
-                Sort.Order.desc("id")
-        );
+                Sort.Order.desc("id"));
 
         List<Transaction> transactions = type == null
                 ? transactionRepository.findAll(sort)
@@ -52,5 +55,14 @@ public class TransactionService {
         return transactions.stream()
                 .map(TransactionResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        try {
+            transactionRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Transação não encontrada");
+        }
     }
 }
