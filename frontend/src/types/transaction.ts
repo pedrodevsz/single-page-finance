@@ -12,6 +12,7 @@ export const paymentMethodOptions = [
   { value: "CASH", label: "Dinheiro" },
   { value: "BANK_ACCOUNT", label: "Conta bancária" },
   { value: "CREDIT_CARD", label: "Cartão de crédito" },
+  { value: "BANK_SLIP", label: "Boleto" },
   { value: "DEBIT_CARD", label: "Cartão de débito" },
   { value: "BANK_TRANSFER", label: "Transferência bancária" },
   { value: "CRYPTO", label: "Cripto" },

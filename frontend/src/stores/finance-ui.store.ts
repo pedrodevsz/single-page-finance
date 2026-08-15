@@ -2,18 +2,14 @@
 
 import { create } from "zustand";
 
-import type { TransactionType } from "@/types/transaction";
+export type FinanceView = "income" | "expense" | "fixed-expense";
 
 type FinanceUiState = {
-  transactionType: TransactionType;
-  setTransactionType: (transactionType: TransactionType) => void;
-  transactionListType: TransactionType;
-  setTransactionListType: (transactionListType: TransactionType) => void;
+  activeFinanceView: FinanceView;
+  setActiveFinanceView: (view: FinanceView) => void;
 };
 
 export const useFinanceUiStore = create<FinanceUiState>((set) => ({
-  transactionType: "income",
-  setTransactionType: (transactionType) => set({ transactionType }),
-  transactionListType: "income",
-  setTransactionListType: (transactionListType) => set({ transactionListType }),
+  activeFinanceView: "income",
+  setActiveFinanceView: (activeFinanceView) => set({ activeFinanceView }),
 }));

@@ -5,3 +5,7 @@ export const transactionKeys = {
   list: (transactionType: TransactionType) =>
     [...transactionKeys.all, "list", transactionType] as const,
 };
+
+export const fixedExpenseKeys = {
+  all: ["fixed-expenses"] as const,
+};

@@ -1,22 +1,20 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { transactionTypeOptions, type TransactionType } from "@/types/transaction";
+
+type Option = { value: string; label: string };
 
 type TransactionToggleGroupProps = {
-  value: TransactionType;
-  onChange: (transactionType: TransactionType) => void;
+  value: string;
+  onChange: (value: string) => void;
   ariaLabel: string;
+  options?: Option[];
 };
 
-export function TransactionToggleGroup({ value, onChange, ariaLabel }: TransactionToggleGroupProps) {
+export function TransactionToggleGroup({ value, onChange, ariaLabel, options = [] }: TransactionToggleGroupProps) {
   return (
-    <div
-      aria-label={ariaLabel}
-      className="inline-flex rounded-full border border-border bg-muted p-1"
-      role="group"
-    >
-      {transactionTypeOptions.map((option) => {
+    <div aria-label={ariaLabel} className="inline-flex rounded-full border border-border bg-muted p-1" role="group">
+      {options.map((option) => {
         const isSelected = option.value === value;
 
         return (
@@ -25,9 +23,7 @@ export function TransactionToggleGroup({ value, onChange, ariaLabel }: Transacti
             aria-pressed={isSelected}
             className={cn(
               "inline-flex h-8 items-center rounded-full px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
-              isSelected
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+              isSelected ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
             )}
             onClick={() => onChange(option.value)}
             type="button"

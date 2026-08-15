@@ -71,6 +71,16 @@ async function getTransactions(transactionType?: TransactionApiType) {
   }
 }
 
+async function DeleteTransaction(transactionId: string) {
+  assertApiConfigured();
+
+  try {
+    await api.delete(`${transactionsEndpoint}/${transactionId}`);
+  } catch (error) {
+    throw new Error(resolveApiErrorMessage(error, "Não foi possível deletar a transação."));
+  }
+}
+
 export const transactionService = {
   getTransactions,
   createIncome(payload: CreateIncomePayload) {
@@ -80,4 +90,7 @@ export const transactionService = {
   createExpense(payload: CreateExpensePayload) {
     return postTransaction(payload);
   },
+  deleteTransaction(transactionId: string) {
+    return DeleteTransaction(transactionId);
+  }
 };
