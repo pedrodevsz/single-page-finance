@@ -1,10 +1,10 @@
 "use client";
 
-import { ExpenseForm } from "@/components/finance/expense-form";
-import { IncomeForm } from "@/components/finance/income-form";
-import { TransactionTypeSelector } from "@/components/finance/transaction-type-selector";
+import { ExpenseForm } from "@/components/finance/expense/expense-form";
+import { IncomeForm } from "@/components/finance/income/income-form";
+import { TransactionTypeSelector } from "@/components/finance/transaction/transaction-type-selector";
 import { useFinanceUiStore } from "@/stores/finance-ui.store";
-import { FixedExpenseForm } from "@/components/finance/fixed-expense-form";
+import { FixedExpenseForm } from "@/components/finance/expense/fixed-expense-form";
 
 export function TransactionFormSection() {
   const active = useFinanceUiStore((state) => state.activeFinanceView);

@@ -77,7 +77,7 @@ export function FixedExpenseList() {
                                 <div className="absolute right-3 bottom-3">
                                     {!fe.paid ? (
                                         <div className="flex items-center gap-2">
-                                            <Checkbox checked={fe.paid} onCheckedChange={async (checked) => {
+                                            <Checkbox id="paid" checked={fe.paid} onCheckedChange={async (checked) => {
                                                 if (checked) {
                                                     try {
                                                         await markPaidMutation.mutateAsync(fe.id);

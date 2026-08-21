@@ -10,27 +10,26 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { FormField } from "@/components/ui/form-field";
-import { MoneyInput } from "@/components/finance/money-input";
+import { MoneyInput } from "@/components/ui/money-input";
 import { getLocalDateInputValue } from "@/lib/date";
-import { isApiConfigured } from "@/lib/api/axios";
-import { expenseSchema, type ExpenseFormValues } from "@/lib/schemas/transaction.schema";
-import { expenseCategories, paymentMethodOptions } from "@/types/transaction";
-import { useCreateExpense } from "@/hooks/transactions/use-create-expense";
+import { incomeSchema, type IncomeFormValues } from "@/lib/schemas/transaction.schema";
+import { incomeCategories, paymentMethodOptions } from "@/types/transaction";
+import { useCreateIncome } from "@/hooks/transactions/use-create-income";
 
-const expenseDefaultValues: ExpenseFormValues = {
+const incomeDefaultValues: IncomeFormValues = {
   description: "",
   amountInCents: 0,
-  category: expenseCategories[0],
+  category: incomeCategories[0],
   transactionDate: "",
   notes: "",
   paymentMethod: paymentMethodOptions[0].value,
 };
 
-export function ExpenseForm() {
-  const createExpenseMutation = useCreateExpense();
-  const form = useForm<ExpenseFormValues>({
-    defaultValues: expenseDefaultValues,
-    resolver: zodResolver(expenseSchema),
+export function IncomeForm() {
+  const createIncomeMutation = useCreateIncome();
+  const form = useForm<IncomeFormValues>({
+    defaultValues: incomeDefaultValues,
+    resolver: zodResolver(incomeSchema),
   });
 
   const {
@@ -43,18 +42,14 @@ export function ExpenseForm() {
     setValue,
   } = form;
 
-  const isSubmitting = createExpenseMutation.isPending;
+  const isSubmitting = createIncomeMutation.isPending;
   const mutationErrorMessage =
-    createExpenseMutation.error instanceof Error ? createExpenseMutation.error.message : null;
+    createIncomeMutation.error instanceof Error ? createIncomeMutation.error.message : null;
 
   const onSubmit = handleSubmit((values) => {
-    if (!isApiConfigured) {
-      return;
-    }
-
-    createExpenseMutation.mutate(values, {
+    createIncomeMutation.mutate(values, {
       onSuccess: () => {
-        reset(expenseDefaultValues);
+        reset(incomeDefaultValues);
         setValue("transactionDate", getLocalDateInputValue(), { shouldDirty: false });
       },
     });
@@ -73,18 +68,22 @@ export function ExpenseForm() {
           className="md:col-span-2"
           error={errors.description?.message}
           label="Descrição"
-          labelFor="expense-description"
+          labelFor="income-description"
         >
-          <Input id="expense-description" placeholder="Supermercado" {...register("description")} />
+          <Input
+            id="income-description"
+            placeholder="Freelance desenvolvimento"
+            {...register("description")}
+          />
         </FormField>
 
-        <FormField error={errors.amountInCents?.message} label="Valor" labelFor="expense-amount">
+        <FormField error={errors.amountInCents?.message} label="Valor" labelFor="income-amount">
           <Controller
             control={control}
             name="amountInCents"
             render={({ field }) => (
               <MoneyInput
-                id="expense-amount"
+                id="income-amount"
                 placeholder="R$ 0,00"
                 value={field.value}
                 onValueChange={field.onChange}
@@ -96,14 +95,14 @@ export function ExpenseForm() {
         <FormField
           error={errors.transactionDate?.message}
           label="Data"
-          labelFor="expense-transaction-date"
+          labelFor="income-transaction-date"
         >
-          <Input id="expense-transaction-date" type="date" {...register("transactionDate")} />
+          <Input id="income-transaction-date" type="date" {...register("transactionDate")} />
         </FormField>
 
-        <FormField error={errors.category?.message} label="Categoria" labelFor="expense-category">
-          <Select id="expense-category" {...register("category")}>
-            {expenseCategories.map((category) => (
+        <FormField error={errors.category?.message} label="Categoria" labelFor="income-category">
+          <Select id="income-category" {...register("category")}>
+            {incomeCategories.map((category) => (
               <option key={category} value={category}>
                 {category}
               </option>
@@ -113,10 +112,10 @@ export function ExpenseForm() {
 
         <FormField
           error={errors.paymentMethod?.message}
-          label="Pagamento"
-          labelFor="expense-payment-method"
+          label="Recebimento"
+          labelFor="income-payment-method"
         >
-          <Select id="expense-payment-method" {...register("paymentMethod")}>
+          <Select id="income-payment-method" {...register("paymentMethod")}>
             {paymentMethodOptions.map((method) => (
               <option key={method.value} value={method.value}>
                 {method.label}
@@ -130,11 +129,11 @@ export function ExpenseForm() {
           error={errors.notes?.message}
           hint="Opcional"
           label="Observação"
-          labelFor="expense-notes"
+          labelFor="income-notes"
         >
           <Textarea
-            id="expense-notes"
-            placeholder="Compra parcelada no cartão"
+            id="income-notes"
+            placeholder="Pagamento referente ao projeto X"
             {...register("notes")}
           />
         </FormField>
@@ -147,8 +146,8 @@ export function ExpenseForm() {
       ) : null}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button disabled={!isApiConfigured || isSubmitting} type="submit">
-          {isSubmitting ? "Salvando..." : "Adicionar gasto"}
+        <Button disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Salvando..." : "Adicionar ganho"}
         </Button>
       </div>
     </form>

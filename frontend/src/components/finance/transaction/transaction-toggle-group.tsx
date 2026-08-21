@@ -2,16 +2,21 @@
 
 import { cn } from "@/lib/utils";
 
-type Option = { value: string; label: string };
+type Option<V extends string> = { value: V; label: string };
 
-type TransactionToggleGroupProps = {
-  value: string;
-  onChange: (value: string) => void;
+type TransactionToggleGroupProps<V extends string> = {
+  value: V;
+  onChange: (value: V) => void;
   ariaLabel: string;
-  options?: Option[];
+  options: readonly Option<V>[];
 };
 
-export function TransactionToggleGroup({ value, onChange, ariaLabel, options = [] }: TransactionToggleGroupProps) {
+export function TransactionToggleGroup<V extends string>({
+  value,
+  onChange,
+  ariaLabel,
+  options,
+}: TransactionToggleGroupProps<V>) {
   return (
     <div aria-label={ariaLabel} className="inline-flex rounded-full border border-border bg-muted p-1" role="group">
       {options.map((option) => {
