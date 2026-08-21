@@ -4,9 +4,10 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tool
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartLegendContent, ChartTooltipContent } from "@/components/ui/chart";
-import { mockTransactions } from "@/lib/mock/finance-mock";
-import { buildFinancialEvolutionSeries } from "@/lib/transactions/financial-evolution";
+import { isApiConfigured } from "@/lib/api/axios";
+import { useFinancialEvolution } from "@/hooks/dashboard/use-dashboard";
 import { formatCentsToBrl } from "@/lib/money";
+import { DashboardQueryError, DashboardQueryMessage, DashboardQuerySkeleton } from "./dashboard-query-state";
 
 const chartConfig = {
   incomeInCents: {
@@ -19,9 +20,39 @@ const chartConfig = {
   },
 } as const;
 
-const chartData = buildFinancialEvolutionSeries(mockTransactions);
+function formatMonthLabel(monthKey: string) {
+  const [year, month] = monthKey.split("-").map(Number);
+  const label = new Intl.DateTimeFormat("pt-BR", { month: "short" })
+    .format(new Date(year, month - 1, 1))
+    .replace(".", "");
+
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
 
 export function FinancialEvolution() {
+  const evolutionQuery = useFinancialEvolution();
+
+  if (!isApiConfigured) {
+    return <DashboardQueryError message="Configure a API para carregar a evolução financeira." />;
+  }
+
+  if (evolutionQuery.isPending) {
+    return <DashboardQuerySkeleton className="h-[420px]" />;
+  }
+
+  if (evolutionQuery.isError) {
+    return <DashboardQueryError message={evolutionQuery.error.message} />;
+  }
+
+  if (evolutionQuery.data.length === 0) {
+    return <DashboardQueryMessage>Nenhuma movimentação disponível para a evolução financeira.</DashboardQueryMessage>;
+  }
+
+  const chartData = evolutionQuery.data.map((point) => ({
+    ...point,
+    month: formatMonthLabel(point.month),
+  }));
+
   return (
     <Card className="overflow-hidden">
       <CardHeader>

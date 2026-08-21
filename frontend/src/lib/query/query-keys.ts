@@ -9,3 +9,10 @@ export const transactionKeys = {
 export const fixedExpenseKeys = {
   all: ["fixed-expenses"] as const,
 };
+
+export const dashboardKeys = {
+  all: ["dashboard"] as const,
+  summary: ["dashboard", "summary"] as const,
+  evolution: (months: number) => ["dashboard", "evolution", { months }] as const,
+  expensesByCategory: ["dashboard", "expenses-by-category"] as const,
+};
