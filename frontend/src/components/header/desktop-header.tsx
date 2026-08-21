@@ -14,8 +14,10 @@ export function DesktopHeader() {
                     <ArrowBigUpIcon />
                 </DrawerTrigger>
 
-                <DrawerContent>
-                    <FinancialDashboard />
+                <DrawerContent className="h-[90dvh] max-h-[90dvh]">
+                    <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+                        <FinancialDashboard />
+                    </div>
                 </DrawerContent>
             </Drawer>
         </div>
