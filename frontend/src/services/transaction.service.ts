@@ -1,6 +1,4 @@
-import axios from "axios";
-
-import { api, isApiConfigured } from "@/lib/api/axios";
+import { mockTransactions } from "@/lib/mock/finance-mock";
 import type {
   CreateExpensePayload,
   CreateIncomePayload,
@@ -8,77 +6,23 @@ import type {
 } from "@/types/transaction";
 import type { Transaction } from "@/types/transaction";
 
-const transactionsEndpoint = "/api/v1/transactions";
-
-function assertApiConfigured() {
-  if (!isApiConfigured) {
-    throw new Error("Configure NEXT_PUBLIC_API_URL para habilitar o envio dos formulários.");
-  }
-}
-
-function resolveApiErrorMessage(error: unknown, fallbackMessage: string) {
-  if (!axios.isAxiosError(error)) {
-    return error instanceof Error && error.message ? error.message : fallbackMessage;
-  }
-
-  const responseData = error.response?.data as
-    | { detail?: unknown; message?: unknown; title?: unknown }
-    | undefined;
-
-  if (typeof responseData?.detail === "string" && responseData.detail.trim()) {
-    return responseData.detail;
-  }
-
-  if (typeof responseData?.message === "string" && responseData.message.trim()) {
-    return responseData.message;
-  }
-
-  if (typeof responseData?.title === "string" && responseData.title.trim()) {
-    return responseData.title;
-  }
-
-  if (typeof error.message === "string" && error.message.trim()) {
-    return error.message;
-  }
-
-  return fallbackMessage;
-}
+let transactions = [...mockTransactions];
 
 async function postTransaction<TPayload extends CreateIncomePayload | CreateExpensePayload>(
   payload: TPayload
 ) {
-  assertApiConfigured();
-
-  try {
-    const response = await api.post<Transaction>(transactionsEndpoint, payload);
-    return response.data;
-  } catch (error) {
-    throw new Error(resolveApiErrorMessage(error, "Não foi possível salvar a transação."));
-  }
+  const now = new Date().toISOString();
+  const transaction: Transaction = { ...payload, id: `mock-${now}`, notes: payload.notes ?? null, createdAt: now, updatedAt: now };
+  transactions = [transaction, ...transactions];
+  return transaction;
 }
 
 async function getTransactions(transactionType?: TransactionApiType) {
-  assertApiConfigured();
-
-  try {
-    const response = await api.get<Transaction[]>(transactionsEndpoint, {
-      params: transactionType ? { type: transactionType } : undefined,
-    });
-
-    return response.data;
-  } catch (error) {
-    throw new Error(resolveApiErrorMessage(error, "Não foi possível carregar as transações."));
-  }
+  return transactions.filter((transaction) => !transactionType || transaction.type === transactionType);
 }
 
 async function DeleteTransaction(transactionId: string) {
-  assertApiConfigured();
-
-  try {
-    await api.delete(`${transactionsEndpoint}/${transactionId}`);
-  } catch (error) {
-    throw new Error(resolveApiErrorMessage(error, "Não foi possível deletar a transação."));
-  }
+  transactions = transactions.filter((transaction) => transaction.id !== transactionId);
 }
 
 export const transactionService = {
