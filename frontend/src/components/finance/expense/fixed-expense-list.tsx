@@ -27,11 +27,11 @@ export function FixedExpenseList() {
                 <Alert variant="destructive"><AlertDescription>{error instanceof Error ? error.message : "Não foi possível carregar"}</AlertDescription></Alert>
             ) : null}
 
-            {isFetching ? (
+            {isFetching && !data ? (
                 <Loading label="Carregando contas fixas..." className="min-h-32" />
             ) : null}
 
-            {!isFetching && data && data.length > 0 ? (
+            {data && data.length > 0 ? (
                 <div className={showAll && data.length > 4 ? "max-h-[calc(4*6rem+0.75rem*3)] overflow-y-auto" : ""}>
                     <ul className="space-y-3">
                         {data.slice(0, showAll ? data.length : 4).map((fe) => (
@@ -99,7 +99,7 @@ export function FixedExpenseList() {
             ) : null}
 
             {/* show more toggle for fixed expenses */}
-            {!isFetching && data && data.length > 4 ? (
+            {data && data.length > 4 ? (
                 <ShowMoreToggle expanded={showAll} onToggle={() => setShowAll((s) => !s)} hiddenCount={data.length - 4} />
             ) : null}
 

@@ -7,7 +7,8 @@ import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
 import { isApiConfigured } from "@/lib/api/axios";
 import { useExpensesByCategory } from "@/hooks/dashboard/use-dashboard";
 import { formatCentsToBrl } from "@/lib/money";
-import { DashboardQueryError, DashboardQueryLoading, DashboardQueryMessage } from "./dashboard-query-state";
+import { Loading } from "@/components/shared/loading";
+import { DashboardQueryError, DashboardQueryMessage } from "./dashboard-query-state";
 
 const chartConfig = {
   amountInCents: {
@@ -24,7 +25,7 @@ export function ExpensesByCategoryChart() {
   }
 
   if (expensesQuery.isPending) {
-    return <DashboardQueryLoading className="h-[420px]" />;
+    return <Loading label="Carregando gastos por categoria..." className="min-h-[420px]" />;
   }
 
   if (expensesQuery.isError) {

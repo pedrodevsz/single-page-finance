@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import { Loading } from "@/components/shared/loading";
 
 export function DashboardQueryMessage({
   children,
@@ -26,8 +25,4 @@ export function DashboardQueryError({ message }: { message: string }) {
       <p className="text-sm font-medium text-destructive">{message}</p>
     </div>
   );
-}
-
-export function DashboardQueryLoading({ className }: { className?: string }) {
-  return <Loading label="Carregando dados..." className={cn("min-h-24", className)} />;
 }

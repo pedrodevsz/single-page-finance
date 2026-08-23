@@ -7,7 +7,8 @@ import {
 import { isApiConfigured } from "@/lib/api/axios";
 import { useFinancialSummary } from "@/hooks/dashboard/use-dashboard";
 import { formatCentsToBrl } from "@/lib/money";
-import { DashboardQueryError, DashboardQueryLoading } from "./dashboard-query-state";
+import { Loading } from "@/components/shared/loading";
+import { DashboardQueryError } from "./dashboard-query-state";
 import { FinancialSummaryCard } from "./finance-summary-card";
 
 
@@ -20,15 +21,7 @@ export function FinancialSummary() {
     }
 
     if (summaryQuery.isPending) {
-        return (
-            <section className="space-y-4" aria-busy="true">
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    {Array.from({ length: 4 }).map((_, index) => (
-                        <DashboardQueryLoading key={index} />
-                    ))}
-                </div>
-            </section>
-        );
+        return <Loading label="Carregando resumo financeiro..." className="min-h-24" />;
     }
 
     if (summaryQuery.isError || !summaryQuery.data) {

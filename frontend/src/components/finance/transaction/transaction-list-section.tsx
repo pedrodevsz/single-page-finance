@@ -55,13 +55,13 @@ export function TransactionListSection() {
           </Alert>
         ) : null}
 
-        {isFetching ? (
+        {active !== "fixed-expense" && isFetching && !data ? (
           <Loading label="Carregando movimentações..." className="min-h-32" />
         ) : null}
 
         {active === "fixed-expense" ? (
           <FixedExpenseList />
-        ) : !isFetching && data && data.length > 0 ? (
+        ) : data && data.length > 0 ? (
           <>
             <div className={showAll && data.length > 4 ? "max-h-[calc(4*6rem+0.75rem*3)] overflow-y-auto" : ""}>
               <ul className="space-y-3">
@@ -149,7 +149,7 @@ export function TransactionListSection() {
             </div>
 
             {/* show more toggle for income/expense lists */}
-            {!isFetching && data && data.length > 4 ? (
+            {data && data.length > 4 ? (
               <ShowMoreToggle expanded={showAll} onToggle={() => setShowAll((s) => !s)} hiddenCount={data.length - 4} />
             ) : null}
           </>
