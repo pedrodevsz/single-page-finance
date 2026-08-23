@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import finance_control.api.dashboard.api.dto.DashboardSummaryResponse;
 import finance_control.api.dashboard.api.dto.ExpenseByCategoryResponse;
 import finance_control.api.dashboard.api.dto.FinancialEvolutionResponse;
-import finance_control.api.fixedexpense.infrastructure.FixedExpenseRepository;
+import finance_control.api.fixedexpense.infrastructure.FixedExpenseInstallmentRepository;
 import finance_control.api.transaction.domain.TransactionType;
 import finance_control.api.transaction.infrastructure.CategoryTransactionTotal;
 import finance_control.api.transaction.infrastructure.MonthlyTransactionTotal;
@@ -31,7 +31,7 @@ class DashboardServiceTest {
     private TransactionRepository transactionRepository;
 
     @Mock
-    private FixedExpenseRepository fixedExpenseRepository;
+    private FixedExpenseInstallmentRepository fixedExpenseRepository;
 
     @InjectMocks
     private DashboardService dashboardService;

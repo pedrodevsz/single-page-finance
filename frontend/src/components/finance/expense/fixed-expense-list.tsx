@@ -67,9 +67,11 @@ export function FixedExpenseList() {
                                                     {fe.notes}
                                                 </span>
                                             ) : null}
-                                            {typeof fe.installments === "number" && fe.installments > 0 ? (
-                                                <span className="inline-flex items-center gap-1.5">{fe.installments}x</span>
-                                            ) : null}
+                                            {fe.totalInstallments ? (
+                                                <span className="inline-flex items-center gap-1.5">Parcela {fe.installmentNumber} de {fe.totalInstallments}</span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1.5">Recorrente</span>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

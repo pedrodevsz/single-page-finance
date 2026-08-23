@@ -1,7 +1,8 @@
 import { PaymentMethod } from "./transaction";
 
-export interface FixedExpense {
+export interface FixedExpenseInstallment {
     id: string;
+    seriesId: string;
     description: string;
     amountInCents: number;
     category: string;
@@ -10,9 +11,13 @@ export interface FixedExpense {
     notes?: string | null;
     createdAt: string;
     updatedAt: string;
-    installments?: number | null;
-    paid?: boolean;
+    installmentNumber: number | null;
+    totalInstallments: number | null;
+    paid: boolean;
+    paidAt: string | null;
 }
+
+export type FixedExpense = FixedExpenseInstallment;
 
 export interface CreateFixedExpensePayload {
     description: string;
