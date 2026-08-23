@@ -1,25 +1,80 @@
-import { mockFixedExpenses } from "@/lib/mock/finance-mock";
+import axios from "axios";
+
+import { api, isApiConfigured } from "@/lib/api/axios";
 import type { CreateFixedExpensePayload, FixedExpense } from "@/types/fixed-expense";
 
-let fixedExpenses = [...mockFixedExpenses];
+const fixedExpensesEndpoint = "/api/v1/fixed-expenses";
+
+function assertApiConfigured() {
+    if (!isApiConfigured) {
+        throw new Error("Configure NEXT_PUBLIC_API_URL para habilitar o envio dos formulários.");
+    }
+}
+
+function resolveApiErrorMessage(error: unknown, fallbackMessage: string) {
+    if (!axios.isAxiosError(error)) {
+        return error instanceof Error && error.message ? error.message : fallbackMessage;
+    }
+
+    const responseData = error.response?.data as
+        | { detail?: unknown; message?: unknown; title?: unknown }
+        | undefined;
+
+    if (typeof responseData?.detail === "string" && responseData.detail.trim()) {
+        return responseData.detail;
+    }
+
+    if (typeof responseData?.message === "string" && responseData.message.trim()) {
+        return responseData.message;
+    }
+
+    if (typeof responseData?.title === "string" && responseData.title.trim()) {
+        return responseData.title;
+    }
+
+    return error.message || fallbackMessage;
+}
 
 export async function getFixedExpenses() {
-    return fixedExpenses.filter((expense) => !expense.paid);
+    assertApiConfigured();
+
+    try {
+        const response = await api.get<FixedExpense[]>(`${fixedExpensesEndpoint}?paid=false`);
+        return response.data;
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível carregar os gastos fixos."));
+    }
 }
 
 export async function createFixedExpense(payload: CreateFixedExpensePayload) {
-    const now = new Date().toISOString();
-    const expense: FixedExpense = { ...payload, id: `mock-fixed-${now}`, notes: payload.notes ?? null, paid: false, createdAt: now, updatedAt: now };
-    fixedExpenses = [expense, ...fixedExpenses];
-    return expense;
+    assertApiConfigured();
+
+    try {
+        const response = await api.post<FixedExpense>(fixedExpensesEndpoint, payload);
+        return response.data;
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível salvar o gasto fixo."));
+    }
 }
 
 export async function deleteFixedExpense(id: string) {
-    fixedExpenses = fixedExpenses.filter((expense) => expense.id !== id);
+    assertApiConfigured();
+
+    try {
+        await api.delete(`${fixedExpensesEndpoint}/${id}`);
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível deletar o gasto fixo."));
+    }
 }
 
 export async function markFixedExpenseAsPaid(id: string) {
-    fixedExpenses = fixedExpenses.map((expense) => expense.id === id ? { ...expense, paid: true } : expense);
+    assertApiConfigured();
+
+    try {
+        await api.patch(`${fixedExpensesEndpoint}/${id}/paid`);
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível marcar o gasto fixo como pago."));
+    }
 }
 
 export const fixedExpenseService = {

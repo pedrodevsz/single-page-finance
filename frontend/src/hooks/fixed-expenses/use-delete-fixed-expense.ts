@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { fixedExpenseService } from "@/services/fixedExpense.service";
-import { fixedExpenseKeys } from "@/lib/query/query-keys";
+import { dashboardKeys, fixedExpenseKeys } from "@/lib/query/query-keys";
 
 export function useDeleteFixedExpense() {
     const queryClient = useQueryClient();
@@ -12,6 +12,7 @@ export function useDeleteFixedExpense() {
         mutationFn: (id: string) => fixedExpenseService.deleteFixedExpense(id),
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.all });
+            void queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
         },
     });
 }
@@ -23,6 +24,7 @@ export function useMarkFixedExpenseAsPaid() {
         mutationFn: (id: string) => fixedExpenseService.markFixedExpenseAsPaid(id),
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.all });
+            void queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
         },
     });
 }
