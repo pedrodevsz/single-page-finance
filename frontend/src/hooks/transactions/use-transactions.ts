@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { isApiConfigured } from "@/lib/api/axios";
 import { toTransactionApiType } from "@/lib/transactions/transaction-mappers";
 import { transactionKeys } from "@/lib/query/query-keys";
 import { transactionService } from "@/services/transaction.service";
@@ -13,7 +14,7 @@ export function useTransactions(): UseQueryResult<Transaction[], Error> {
   const isFixedExpenseView = active === "fixed-expense";
 
   return useQuery<Transaction[], Error>({
-    enabled: !isFixedExpenseView,
+    enabled: isApiConfigured && !isFixedExpenseView,
     initialData: isFixedExpenseView ? [] : undefined,
     queryFn: () => isFixedExpenseView
       ? Promise.resolve([])

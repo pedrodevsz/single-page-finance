@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { toCreateExpensePayload } from "@/lib/transactions/transaction-mappers";
 import { transactionKeys } from "@/lib/query/query-keys";
+import { dashboardKeys } from "@/lib/query/query-keys";
 import { transactionService } from "@/services/transaction.service";
 import type { ExpenseFormValues } from "@/lib/schemas/transaction.schema";
 
@@ -15,6 +16,7 @@ export function useCreateExpense() {
       transactionService.createExpense(toCreateExpensePayload(values)),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: transactionKeys.all });
+      void queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
     },
   });
 }

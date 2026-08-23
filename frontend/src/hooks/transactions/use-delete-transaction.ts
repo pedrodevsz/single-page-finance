@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { transactionKeys } from "@/lib/query/query-keys";
+import { dashboardKeys, transactionKeys } from "@/lib/query/query-keys";
 import { transactionService } from "@/services/transaction.service";
 
 export function useDeleteTransaction() {
@@ -12,6 +12,7 @@ export function useDeleteTransaction() {
         mutationFn: (transactionId: string) => transactionService.deleteTransaction(transactionId),
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: transactionKeys.all });
+            void queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
         },
     });
 }

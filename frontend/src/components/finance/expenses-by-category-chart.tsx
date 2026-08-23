@@ -4,9 +4,10 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
-import { mockTransactions } from "@/lib/mock/finance-mock";
-import { buildExpensesByCategoryData } from "@/lib/transactions/expenses-by-category";
+import { isApiConfigured } from "@/lib/api/axios";
+import { useExpensesByCategory } from "@/hooks/dashboard/use-dashboard";
 import { formatCentsToBrl } from "@/lib/money";
+import { DashboardQueryError, DashboardQueryMessage, DashboardQuerySkeleton } from "./dashboard-query-state";
 
 const chartConfig = {
   amountInCents: {
@@ -15,10 +16,24 @@ const chartConfig = {
   },
 } as const;
 
-const chartData = buildExpensesByCategoryData(mockTransactions);
-const chartHeight = Math.max(320, chartData.length * 42 + 72);
-
 export function ExpensesByCategoryChart() {
+  const expensesQuery = useExpensesByCategory();
+
+  if (!isApiConfigured) {
+    return <DashboardQueryError message="Configure a API para carregar os gastos por categoria." />;
+  }
+
+  if (expensesQuery.isPending) {
+    return <DashboardQuerySkeleton className="h-[420px]" />;
+  }
+
+  if (expensesQuery.isError) {
+    return <DashboardQueryError message={expensesQuery.error.message} />;
+  }
+
+  const chartData = expensesQuery.data;
+  const chartHeight = Math.max(320, chartData.length * 42 + 72);
+
   return (
     <Card className="overflow-hidden">
       <CardHeader>
@@ -61,9 +76,7 @@ export function ExpensesByCategoryChart() {
             </ResponsiveContainer>
           </ChartContainer>
         ) : (
-          <div className="rounded-xl border border-dashed border-border bg-muted/20 p-6 text-center">
-            <p className="text-sm font-medium text-foreground">Nenhum gasto disponível para análise por categoria.</p>
-          </div>
+          <DashboardQueryMessage>Nenhum gasto disponível para análise por categoria.</DashboardQueryMessage>
         )}
       </CardContent>
     </Card>
