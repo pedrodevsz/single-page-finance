@@ -8,6 +8,8 @@ export const transactionKeys = {
 
 export const fixedExpenseKeys = {
   all: ["fixed-expenses"] as const,
+  history: ["fixed-expenses", "history"] as const,
+  historyDetails: (id: string) => ["fixed-expenses", "history", id] as const,
 };
 
 export const dashboardKeys = {

@@ -7,7 +7,7 @@ import {
 import { isApiConfigured } from "@/lib/api/axios";
 import { useFinancialSummary } from "@/hooks/dashboard/use-dashboard";
 import { formatCentsToBrl } from "@/lib/money";
-import { DashboardQueryError, DashboardQuerySkeleton } from "./dashboard-query-state";
+import { DashboardQueryError, DashboardQueryLoading } from "./dashboard-query-state";
 import { FinancialSummaryCard } from "./finance-summary-card";
 
 
@@ -24,7 +24,7 @@ export function FinancialSummary() {
             <section className="space-y-4" aria-busy="true">
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {Array.from({ length: 4 }).map((_, index) => (
-                        <DashboardQuerySkeleton key={index} />
+                        <DashboardQueryLoading key={index} />
                     ))}
                 </div>
             </section>

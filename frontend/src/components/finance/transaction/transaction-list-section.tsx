@@ -18,6 +18,7 @@ import { useFinanceUiStore } from "@/stores/finance-ui.store";
 import { Button } from "../../ui/button";
 import { ShowMoreToggle } from "@/components/ui/show-more-toggle";
 import { FixedExpenseList } from "../expense/fixed-expense-list";
+import { Loading } from "@/components/shared/loading";
 
 export function TransactionListSection() {
   const active = useFinanceUiStore((state) => state.activeFinanceView);
@@ -55,14 +56,7 @@ export function TransactionListSection() {
         ) : null}
 
         {isFetching ? (
-          <div className="space-y-3" aria-live="polite" aria-busy="true">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <div
-                key={`transaction-skeleton-${index}`}
-                className="h-24 animate-pulse rounded-xl border border-border bg-muted/40"
-              />
-            ))}
-          </div>
+          <Loading label="Carregando movimentações..." className="min-h-32" />
         ) : null}
 
         {active === "fixed-expense" ? (

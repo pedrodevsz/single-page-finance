@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { isApiConfigured } from "@/lib/api/axios";
 import { useFinancialSummary } from "@/hooks/dashboard/use-dashboard";
 import { formatCentsToBrl } from "@/lib/money";
-import { DashboardQueryError, DashboardQuerySkeleton } from "./dashboard-query-state";
+import { DashboardQueryError, DashboardQueryLoading } from "./dashboard-query-state";
 
 function SummaryStat({
   label,
@@ -39,7 +39,7 @@ export function FixedExpensesSummary() {
   }
 
   if (summaryQuery.isPending) {
-    return <DashboardQuerySkeleton className="h-[280px]" />;
+    return <DashboardQueryLoading className="h-[280px]" />;
   }
 
   if (summaryQuery.isError || !summaryQuery.data) {

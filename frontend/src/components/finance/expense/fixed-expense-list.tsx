@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { useDeleteFixedExpense, useMarkFixedExpenseAsPaid } from "@/hooks/fixed-expenses/use-delete-fixed-expense";
 import { ShowMoreToggle } from "@/components/ui/show-more-toggle";
+import { Loading } from "@/components/shared/loading";
 
 export function FixedExpenseList() {
     const { data, isError, error, isFetching } = useFixedExpenses();
@@ -27,11 +28,7 @@ export function FixedExpenseList() {
             ) : null}
 
             {isFetching ? (
-                <div className="space-y-3" aria-live="polite" aria-busy="true">
-                    {Array.from({ length: 4 }).map((_, i) => (
-                        <div key={i} className="h-24 animate-pulse rounded-xl border border-border bg-muted/40" />
-                    ))}
-                </div>
+                <Loading label="Carregando contas fixas..." className="min-h-32" />
             ) : null}
 
             {!isFetching && data && data.length > 0 ? (
