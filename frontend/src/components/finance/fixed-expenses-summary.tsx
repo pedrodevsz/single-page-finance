@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { isApiConfigured } from "@/lib/api/axios";
 import { useFinancialSummary } from "@/hooks/dashboard/use-dashboard";
 import { formatCentsToBrl } from "@/lib/money";
-import { DashboardQueryError, DashboardQueryLoading } from "./dashboard-query-state";
+import { Loading } from "@/components/shared/loading";
+import { DashboardQueryError } from "./dashboard-query-state";
 
 function SummaryStat({
   label,
@@ -39,7 +40,7 @@ export function FixedExpensesSummary() {
   }
 
   if (summaryQuery.isPending) {
-    return <DashboardQueryLoading className="h-[280px]" />;
+    return <Loading label="Carregando contas fixas..." className="min-h-[280px]" />;
   }
 
   if (summaryQuery.isError || !summaryQuery.data) {

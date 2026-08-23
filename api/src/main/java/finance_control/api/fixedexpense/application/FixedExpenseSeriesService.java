@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import finance_control.api.fixedexpense.api.dto.CreateFixedExpenseRequest;
 import finance_control.api.fixedexpense.api.dto.FixedExpenseInstallmentResponse;
@@ -38,6 +41,16 @@ public class FixedExpenseSeriesService {
                     series, installmentNumber, dueDateFor(request.dueDate(), number - 1)));
         }
         return FixedExpenseInstallmentResponse.from(installmentRepository.saveAll(installments).get(0));
+    }
+
+    @Transactional
+    public void delete(UUID seriesId) {
+        FixedExpenseSeries series = seriesRepository.findById(seriesId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Série de conta fixa não encontrada"));
+
+        installmentRepository.deleteAll(installmentRepository.findAllBySeriesIdOrderByDueDateDesc(seriesId));
+        seriesRepository.delete(series);
     }
 
     static LocalDate dueDateFor(LocalDate firstDueDate, int monthOffset) {
