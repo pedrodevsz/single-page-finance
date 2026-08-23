@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { FormField } from "@/components/ui/form-field";
-import { MoneyInput } from "@/components/finance/money-input";
+import { MoneyInput } from "@/components/ui/money-input";
 import { paymentMethodOptions, expenseCategories } from "@/types/transaction";
 import { getLocalDateInputValue } from "@/lib/date";
 import { fixedExpenseSchema, type FixedExpenseFormValues } from "@/lib/schemas/fixed-expense.schema";

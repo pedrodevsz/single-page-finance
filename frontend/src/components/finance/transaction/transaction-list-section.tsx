@@ -5,7 +5,6 @@ import { ArrowDownRight, ArrowUpRight, CalendarDays, NotebookText, TrashIcon } f
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useState } from "react";
 import { useDeleteTransaction } from "@/hooks/transactions/use-delete-transaction";
-import { FixedExpenseList } from "@/components/finance/fixed-expense-list";
 import {
   formatTransactionAmount,
   formatTransactionDate,
@@ -13,11 +12,12 @@ import {
 } from "@/lib/transactions/transaction-formatters";
 import { cn } from "@/lib/utils";
 import { useTransactions } from "@/hooks/transactions/use-transactions";
-import { TransactionListTypeSelector } from "@/components/finance/transaction-list-type-selector";
+import { TransactionListTypeSelector } from "@/components/finance/transaction/transaction-list-type-selector";
 import { EmptyListState } from "@/components/ui/empty-list-state";
 import { useFinanceUiStore } from "@/stores/finance-ui.store";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { ShowMoreToggle } from "@/components/ui/show-more-toggle";
+import { FixedExpenseList } from "../expense/fixed-expense-list";
 
 export function TransactionListSection() {
   const active = useFinanceUiStore((state) => state.activeFinanceView);
@@ -208,7 +208,7 @@ export function TransactionListSection() {
                       setDeletingId(id);
                       await deleteMutation.mutateAsync(id);
                       setSelectedTransaction(null);
-                    } catch (_) {
+                    } catch {
                       // error handled/displayed via deleteMutation.isError
                     } finally {
                       setDeletingId(null);
