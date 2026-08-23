@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +14,18 @@ import org.springframework.web.server.ResponseStatusException;
 import finance_control.api.fixedexpense.api.dto.FixedExpenseInstallmentResponse;
 import finance_control.api.fixedexpense.domain.FixedExpenseInstallment;
 import finance_control.api.fixedexpense.infrastructure.FixedExpenseInstallmentRepository;
+import finance_control.api.fixedexpense.infrastructure.FixedExpenseSeriesRepository;
 
 @Service
 public class FixedExpenseInstallmentService {
     private final FixedExpenseInstallmentRepository repository;
+    private final FixedExpenseSeriesRepository seriesRepository;
 
-    public FixedExpenseInstallmentService(FixedExpenseInstallmentRepository repository) {
+    public FixedExpenseInstallmentService(
+            FixedExpenseInstallmentRepository repository,
+            FixedExpenseSeriesRepository seriesRepository) {
         this.repository = repository;
+        this.seriesRepository = seriesRepository;
     }
 
     @Transactional(readOnly = true)
@@ -63,10 +67,13 @@ public class FixedExpenseInstallmentService {
 
     @Transactional
     public void delete(UUID installmentId) {
-        try {
-            repository.deleteById(installmentId);
-        } catch (EmptyResultDataAccessException ex) {
-            throw notFound("Parcela não encontrada");
+        FixedExpenseInstallment installment = repository.findById(installmentId)
+                .orElseThrow(() -> notFound("Parcela não encontrada"));
+        UUID seriesId = installment.getSeries().getId();
+
+        repository.delete(installment);
+        if (repository.countBySeriesId(seriesId) == 0) {
+            seriesRepository.deleteById(seriesId);
         }
     }
 

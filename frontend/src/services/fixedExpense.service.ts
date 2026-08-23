@@ -78,6 +78,36 @@ export async function markFixedExpenseAsPaid(id: string) {
     }
 }
 
+export async function deleteFixedExpenseSeries(seriesId: string) {
+    assertApiConfigured();
+
+    try {
+        await api.delete(`${fixedExpensesEndpoint}/series/${seriesId}`);
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível excluir esta conta."));
+    }
+}
+
+export async function deleteFixedExpenseInstallment(installmentId: string) {
+    assertApiConfigured();
+
+    try {
+        await api.delete(`${fixedExpensesEndpoint}/installments/${installmentId}`);
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível excluir esta parcela."));
+    }
+}
+
+export async function payFixedExpenseInstallment(installmentId: string) {
+    assertApiConfigured();
+
+    try {
+        await api.patch(`${fixedExpensesEndpoint}/installments/${installmentId}/payment`);
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível registrar o pagamento."));
+    }
+}
+
 export async function getFixedExpenseHistory() {
     assertApiConfigured();
 
@@ -105,6 +135,9 @@ export const fixedExpenseService = {
     createFixedExpense,
     deleteFixedExpense,
     markFixedExpenseAsPaid,
+    deleteFixedExpenseSeries,
+    deleteFixedExpenseInstallment,
+    payFixedExpenseInstallment,
     getFixedExpenseHistory,
     getFixedExpenseHistoryDetails,
 };

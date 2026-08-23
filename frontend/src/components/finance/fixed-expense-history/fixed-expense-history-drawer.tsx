@@ -73,7 +73,12 @@ export function FixedExpenseHistoryDrawer() {
             </Drawer>
             <Sheet open={selectedId !== null} onOpenChange={(open) => !open && setSelectedId(null)}>
                 <SheetContent className="max-h-dvh overflow-hidden shadow-none sm:max-w-lg">
-                    {selectedId && <FixedExpenseHistoryDetails seriesId={selectedId} />}
+                    {selectedId && (
+                        <FixedExpenseHistoryDetails
+                            seriesId={selectedId}
+                            onSeriesDeleted={() => setSelectedId(null)}
+                        />
+                    )}
                 </SheetContent>
             </Sheet>
         </>

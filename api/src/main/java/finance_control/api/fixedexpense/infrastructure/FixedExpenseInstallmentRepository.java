@@ -20,6 +20,7 @@ public interface FixedExpenseInstallmentRepository extends JpaRepository<FixedEx
     List<FixedExpenseInstallment> findAllBySeriesIdOrderByDueDateDesc(UUID seriesId);
     Optional<FixedExpenseInstallment> findTopBySeriesIdOrderByDueDateDesc(UUID seriesId);
     Optional<FixedExpenseInstallment> findBySeriesIdAndDueDate(UUID seriesId, LocalDate dueDate);
+    long countBySeriesId(UUID seriesId);
 
     @Query("""
             select coalesce(sum(installment.amountInCents), 0)

@@ -30,3 +30,35 @@ export function useMarkFixedExpenseAsPaid() {
         },
     });
 }
+
+function invalidateFixedExpenseData(queryClient: ReturnType<typeof useQueryClient>) {
+    void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.all });
+    void queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
+}
+
+export function useDeleteFixedExpenseSeries() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (seriesId: string) => fixedExpenseService.deleteFixedExpenseSeries(seriesId),
+        onSuccess: () => invalidateFixedExpenseData(queryClient),
+    });
+}
+
+export function useDeleteFixedExpenseInstallment() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (installmentId: string) => fixedExpenseService.deleteFixedExpenseInstallment(installmentId),
+        onSuccess: () => invalidateFixedExpenseData(queryClient),
+    });
+}
+
+export function usePayFixedExpenseInstallment() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (installmentId: string) => fixedExpenseService.payFixedExpenseInstallment(installmentId),
+        onSuccess: () => invalidateFixedExpenseData(queryClient),
+    });
+}

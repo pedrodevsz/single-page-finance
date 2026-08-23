@@ -57,16 +57,28 @@ public class FixedExpenseController {
     }
 
     @PostMapping
-    public ResponseEntity<FixedExpenseInstallmentResponse> create(@Valid @RequestBody CreateFixedExpenseRequest request) {
+    public ResponseEntity<FixedExpenseInstallmentResponse> create(
+            @Valid @RequestBody CreateFixedExpenseRequest request) {
         FixedExpenseInstallmentResponse response = seriesService.create(request);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(response.seriesId()).toUri();
         return ResponseEntity.created(location).body(response);
     }
 
-    /** Compatibility path: the id now identifies an installment, not a series. */
     @DeleteMapping("/{installmentId}")
     public ResponseEntity<Void> delete(@PathVariable UUID installmentId) {
+        installmentService.delete(installmentId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/series/{seriesId}")
+    public ResponseEntity<Void> deleteSeries(@PathVariable UUID seriesId) {
+        seriesService.delete(seriesId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/installments/{installmentId}")
+    public ResponseEntity<Void> deleteInstallment(@PathVariable UUID installmentId) {
         installmentService.delete(installmentId);
         return ResponseEntity.noContent().build();
     }
