@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import finance_control.api.dashboard.api.dto.DashboardSummaryResponse;
 import finance_control.api.dashboard.api.dto.ExpenseByCategoryResponse;
 import finance_control.api.dashboard.api.dto.FinancialEvolutionResponse;
-import finance_control.api.fixedexpense.infrastructure.FixedExpenseRepository;
+import finance_control.api.fixedexpense.infrastructure.FixedExpenseInstallmentRepository;
 import finance_control.api.transaction.domain.TransactionType;
 import finance_control.api.transaction.infrastructure.CategoryTransactionTotal;
 import finance_control.api.transaction.infrastructure.MonthlyTransactionTotal;
@@ -25,11 +25,11 @@ public class DashboardService {
     private static final int DEFAULT_EVOLUTION_MONTHS = 6;
 
     private final TransactionRepository transactionRepository;
-    private final FixedExpenseRepository fixedExpenseRepository;
+    private final FixedExpenseInstallmentRepository fixedExpenseRepository;
 
     public DashboardService(
             TransactionRepository transactionRepository,
-            FixedExpenseRepository fixedExpenseRepository) {
+            FixedExpenseInstallmentRepository fixedExpenseRepository) {
         this.transactionRepository = transactionRepository;
         this.fixedExpenseRepository = fixedExpenseRepository;
     }
