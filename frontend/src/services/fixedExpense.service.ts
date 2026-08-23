@@ -1,7 +1,8 @@
 import axios from "axios";
 
 import { api, isApiConfigured } from "@/lib/api/axios";
-import type { CreateFixedExpensePayload, FixedExpense } from "@/types/fixed-expense";
+import type { CreateFixedExpensePayload, FixedExpenseInstallment } from "@/types/fixed-expense";
+import type { FixedExpenseHistoryRecord, FixedExpenseHistorySummary } from "@/types/fixed-expense-history";
 
 const fixedExpensesEndpoint = "/api/v1/fixed-expenses";
 
@@ -39,7 +40,7 @@ export async function getFixedExpenses() {
     assertApiConfigured();
 
     try {
-        const response = await api.get<FixedExpense[]>(`${fixedExpensesEndpoint}?paid=false`);
+        const response = await api.get<FixedExpenseInstallment[]>(`${fixedExpensesEndpoint}?paid=false`);
         return response.data;
     } catch (error) {
         throw new Error(resolveApiErrorMessage(error, "Não foi possível carregar os gastos fixos."));
@@ -50,7 +51,7 @@ export async function createFixedExpense(payload: CreateFixedExpensePayload) {
     assertApiConfigured();
 
     try {
-        const response = await api.post<FixedExpense>(fixedExpensesEndpoint, payload);
+        const response = await api.post<FixedExpenseInstallment>(fixedExpensesEndpoint, payload);
         return response.data;
     } catch (error) {
         throw new Error(resolveApiErrorMessage(error, "Não foi possível salvar o gasto fixo."));
@@ -77,9 +78,33 @@ export async function markFixedExpenseAsPaid(id: string) {
     }
 }
 
+export async function getFixedExpenseHistory() {
+    assertApiConfigured();
+
+    try {
+        const response = await api.get<FixedExpenseHistorySummary[]>(`${fixedExpensesEndpoint}/history`);
+        return response.data;
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível carregar o histórico de contas."));
+    }
+}
+
+export async function getFixedExpenseHistoryDetails(id: string) {
+    assertApiConfigured();
+
+    try {
+        const response = await api.get<FixedExpenseHistoryRecord[]>(`${fixedExpensesEndpoint}/${id}/history`);
+        return response.data;
+    } catch (error) {
+        throw new Error(resolveApiErrorMessage(error, "Não foi possível carregar os detalhes do histórico."));
+    }
+}
+
 export const fixedExpenseService = {
     getFixedExpenses,
     createFixedExpense,
     deleteFixedExpense,
     markFixedExpenseAsPaid,
+    getFixedExpenseHistory,
+    getFixedExpenseHistoryDetails,
 };

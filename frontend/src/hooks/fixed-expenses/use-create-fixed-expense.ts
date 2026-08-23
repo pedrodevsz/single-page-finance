@@ -13,6 +13,7 @@ export function useCreateFixedExpense() {
         mutationFn: (values: FixedExpenseFormValues) => fixedExpenseService.createFixedExpense(values),
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.all });
+            void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.history });
             void queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
         },
     });

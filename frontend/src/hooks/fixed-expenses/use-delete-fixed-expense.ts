@@ -12,6 +12,7 @@ export function useDeleteFixedExpense() {
         mutationFn: (id: string) => fixedExpenseService.deleteFixedExpense(id),
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.all });
+            void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.history });
             void queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
         },
     });
@@ -24,6 +25,7 @@ export function useMarkFixedExpenseAsPaid() {
         mutationFn: (id: string) => fixedExpenseService.markFixedExpenseAsPaid(id),
         onSuccess: () => {
             void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.all });
+            void queryClient.invalidateQueries({ queryKey: fixedExpenseKeys.history });
             void queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
         },
     });
