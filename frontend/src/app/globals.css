@@ -131,3 +131,25 @@
     @apply font-sans;
   }
 }
+
+@keyframes finance-404-coin {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, 0) rotate(-8deg);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(-50%, -0.45rem) rotate(8deg);
+  }
+}
+
+.finance-404-coin {
+  animation: finance-404-coin 3.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .finance-404-coin {
+    animation: none;
+  }
+}
