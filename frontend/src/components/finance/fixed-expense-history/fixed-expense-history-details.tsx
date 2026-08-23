@@ -6,6 +6,7 @@ import { useFixedExpenseHistoryDetails } from "@/hooks/fixed-expenses/use-fixed-
 import { formatTransactionDate, getPaymentMethodLabel } from "@/lib/transactions/transaction-formatters";
 import { formatCentsToBrl } from "@/lib/money";
 import { SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Loading } from "@/components/shared/loading";
 
 export function FixedExpenseHistoryDetails({ seriesId }: { seriesId: string }) {
     const query = useFixedExpenseHistoryDetails(seriesId);
@@ -17,9 +18,7 @@ export function FixedExpenseHistoryDetails({ seriesId }: { seriesId: string }) {
                 <SheetDescription>Registros mais recentes primeiro.</SheetDescription>
             </SheetHeader>
             <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
-                {query.isPending && <div className="space-y-3" aria-label="Carregando detalhes">
-                    {[1, 2, 3].map((item) => <div key={item} className="h-36 animate-pulse rounded-xl bg-muted/50" />)}
-                </div>}
+                {query.isPending && <Loading label="Carregando detalhes..." className="min-h-40" />}
                 {query.isError && <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">{query.error.message}</div>}
                 {query.isSuccess && query.data.length === 0 && <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">Nenhum registro disponível.</p>}
                 {query.isSuccess && query.data.length > 0 && <div className="space-y-3">

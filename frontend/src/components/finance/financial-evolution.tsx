@@ -7,7 +7,7 @@ import { ChartContainer, ChartLegendContent, ChartTooltipContent } from "@/compo
 import { isApiConfigured } from "@/lib/api/axios";
 import { useFinancialEvolution } from "@/hooks/dashboard/use-dashboard";
 import { formatCentsToBrl } from "@/lib/money";
-import { DashboardQueryError, DashboardQueryMessage, DashboardQuerySkeleton } from "./dashboard-query-state";
+import { DashboardQueryError, DashboardQueryLoading, DashboardQueryMessage } from "./dashboard-query-state";
 
 const chartConfig = {
   incomeInCents: {
@@ -37,7 +37,7 @@ export function FinancialEvolution() {
   }
 
   if (evolutionQuery.isPending) {
-    return <DashboardQuerySkeleton className="h-[420px]" />;
+    return <DashboardQueryLoading className="h-[420px]" />;
   }
 
   if (evolutionQuery.isError) {

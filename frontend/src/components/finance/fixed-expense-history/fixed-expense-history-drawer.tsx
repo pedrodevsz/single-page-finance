@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CheckCircle2, ChevronRight, Clock3, History, ReceiptText } from "lucide-react";
 
 import { useFixedExpenseHistory } from "@/hooks/fixed-expenses/use-fixed-expense-history";
+import { Loading } from "@/components/shared/loading";
 import { Button } from "@/components/ui/button";
 import {
     Drawer,
@@ -15,18 +16,6 @@ import {
 } from "@/components/ui/drawer";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { FixedExpenseHistoryDetails } from "./fixed-expense-history-details";
-
-function HistorySkeleton() {
-    return <div className="divide-y divide-border" aria-label="Carregando histórico">
-        {[1, 2, 3].map((item) => (
-            <div key={item} className="space-y-3 py-4 first:pt-1">
-                <div className="h-4 w-2/5 animate-pulse bg-muted/50" />
-                <div className="h-3 w-1/3 animate-pulse bg-muted/50" />
-                <div className="h-3 w-1/2 animate-pulse bg-muted/50" />
-            </div>
-        ))}
-    </div>;
-}
 
 export function FixedExpenseHistoryDrawer() {
     const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -44,7 +33,7 @@ export function FixedExpenseHistoryDrawer() {
                         <DrawerDescription>Consulte pagamentos e pendências das suas contas fixas.</DrawerDescription>
                     </DrawerHeader>
                     <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 pt-3">
-                        {historyQuery.isPending && <HistorySkeleton />}
+                        {historyQuery.isPending && <Loading label="Carregando histórico..." className="min-h-40" />}
                         {historyQuery.isError && (
                             <div className="p-4 text-sm text-destructive">
                                 {historyQuery.error.message}
