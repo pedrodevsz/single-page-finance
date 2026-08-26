@@ -1,5 +1,10 @@
 .vscode/
 
+# Environment files
+.env
+.env.*
+!.env.example
+
 # Node / Next.js
 node_modules/
 frontend/node_modules/
