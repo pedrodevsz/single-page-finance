@@ -10,6 +10,8 @@ RUN pnpm install --frozen-lockfile
 
 FROM base AS build
 
+ARG DOCKER_BUILD=true
+ENV DOCKER_BUILD=$DOCKER_BUILD
 ARG NEXT_PUBLIC_API_URL=http://localhost:8080
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
