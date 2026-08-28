@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-import { paymentMethodOptions } from "@/types/transaction";
 
 const descriptionSchema = z
     .string()
@@ -25,20 +24,12 @@ const notesSchema = z
     .max(255, "A observação deve ter no máximo 255 caracteres.")
     .optional();
 
-const paymentMethodSchema = z.enum(
-    paymentMethodOptions.map((option) => option.value) as [
-        (typeof paymentMethodOptions)[number]["value"],
-        ...(typeof paymentMethodOptions)[number]["value"][]
-    ],
-    {
-        error: () => "Selecione um meio de pagamento.",
-    }
-);
+const paymentMethodSchema = z.string().trim().min(1, "Selecione um meio de pagamento.").max(80);
 
 export const fixedExpenseSchema = z.object({
     description: descriptionSchema,
     amountInCents: amountSchema,
-    category: z.string().min(1, "Selecione uma categoria."),
+    category: z.string().trim().min(1, "Selecione uma categoria.").max(80),
     dueDate: dateSchema,
     paymentMethod: paymentMethodSchema,
     notes: notesSchema,

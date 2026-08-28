@@ -7,22 +7,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { ManagedOptionSelect } from "@/components/finance/managed-option-select";
 import { Textarea } from "@/components/ui/textarea";
 import { FormField } from "@/components/ui/form-field";
 import { MoneyInput } from "@/components/ui/money-input";
 import { getLocalDateInputValue } from "@/lib/date";
 import { expenseSchema, type ExpenseFormValues } from "@/lib/schemas/transaction.schema";
-import { expenseCategories, paymentMethodOptions } from "@/types/transaction";
 import { useCreateExpense } from "@/hooks/transactions/use-create-expense";
 
 const expenseDefaultValues: ExpenseFormValues = {
   description: "",
   amountInCents: 0,
-  category: expenseCategories[0],
+  category: "Outros",
   transactionDate: "",
   notes: "",
-  paymentMethod: paymentMethodOptions[0].value,
+  paymentMethod: "PIX",
 };
 
 export function ExpenseForm() {
@@ -96,29 +95,9 @@ export function ExpenseForm() {
           <Input id="expense-transaction-date" type="date" {...register("transactionDate")} />
         </FormField>
 
-        <FormField error={errors.category?.message} label="Categoria" labelFor="expense-category">
-          <Select id="expense-category" {...register("category")}>
-            {expenseCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </Select>
-        </FormField>
+        <ManagedOptionSelect id="expense-category" label="Categoria" title="Categorias" type="EXPENSE_CATEGORY" registration={register("category")} error={errors.category?.message} onOptionCreated={(name) => setValue("category", name, { shouldDirty: true })} />
 
-        <FormField
-          error={errors.paymentMethod?.message}
-          label="Pagamento"
-          labelFor="expense-payment-method"
-        >
-          <Select id="expense-payment-method" {...register("paymentMethod")}>
-            {paymentMethodOptions.map((method) => (
-              <option key={method.value} value={method.value}>
-                {method.label}
-              </option>
-            ))}
-          </Select>
-        </FormField>
+        <ManagedOptionSelect id="expense-payment-method" label="Pagamento" title="Formas de pagamento" type="PAYMENT_METHOD" registration={register("paymentMethod")} error={errors.paymentMethod?.message} onOptionCreated={(name) => setValue("paymentMethod", name, { shouldDirty: true })} />
 
         <FormField
           className="md:col-span-2"

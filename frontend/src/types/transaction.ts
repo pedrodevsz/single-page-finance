@@ -19,7 +19,7 @@ export const paymentMethodOptions = [
   { value: "OTHER", label: "Outro" },
 ] as const;
 
-export type PaymentMethod = (typeof paymentMethodOptions)[number]["value"];
+export type PaymentMethod = string;
 
 export const incomeCategories = [
   "Salário",
