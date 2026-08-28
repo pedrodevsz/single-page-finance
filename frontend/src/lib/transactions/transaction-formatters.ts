@@ -3,7 +3,7 @@ import { parseApiDate } from "@/lib/date";
 import type { PaymentMethod, TransactionApiType } from "@/types/transaction";
 import { paymentMethodOptions } from "@/types/transaction";
 
-const paymentMethodLabelByValue = Object.fromEntries(
+const paymentMethodLabelByValue: Record<string, string> = Object.fromEntries(
   paymentMethodOptions.map((option) => [option.value, option.label])
 ) as Record<PaymentMethod, string>;
 
@@ -26,5 +26,5 @@ export function formatTransactionAmount(amountInCents: number, type: Transaction
 }
 
 export function getPaymentMethodLabel(paymentMethod: PaymentMethod) {
-  return paymentMethodLabelByValue[paymentMethod];
+  return paymentMethodLabelByValue[paymentMethod] ?? paymentMethod;
 }

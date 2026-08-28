@@ -7,22 +7,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { ManagedOptionSelect } from "@/components/finance/managed-option-select";
 import { Textarea } from "@/components/ui/textarea";
 import { FormField } from "@/components/ui/form-field";
 import { MoneyInput } from "@/components/ui/money-input";
 import { getLocalDateInputValue } from "@/lib/date";
 import { incomeSchema, type IncomeFormValues } from "@/lib/schemas/transaction.schema";
-import { incomeCategories, paymentMethodOptions } from "@/types/transaction";
 import { useCreateIncome } from "@/hooks/transactions/use-create-income";
 
 const incomeDefaultValues: IncomeFormValues = {
   description: "",
   amountInCents: 0,
-  category: incomeCategories[0],
+  category: "Outros",
   transactionDate: "",
   notes: "",
-  paymentMethod: paymentMethodOptions[0].value,
+  paymentMethod: "PIX",
 };
 
 export function IncomeForm() {
@@ -100,29 +99,9 @@ export function IncomeForm() {
           <Input id="income-transaction-date" type="date" {...register("transactionDate")} />
         </FormField>
 
-        <FormField error={errors.category?.message} label="Categoria" labelFor="income-category">
-          <Select id="income-category" {...register("category")}>
-            {incomeCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </Select>
-        </FormField>
+        <ManagedOptionSelect id="income-category" label="Categoria" title="Categorias" type="INCOME_CATEGORY" registration={register("category")} error={errors.category?.message} onOptionCreated={(name) => setValue("category", name, { shouldDirty: true })} />
 
-        <FormField
-          error={errors.paymentMethod?.message}
-          label="Recebimento"
-          labelFor="income-payment-method"
-        >
-          <Select id="income-payment-method" {...register("paymentMethod")}>
-            {paymentMethodOptions.map((method) => (
-              <option key={method.value} value={method.value}>
-                {method.label}
-              </option>
-            ))}
-          </Select>
-        </FormField>
+        <ManagedOptionSelect id="income-payment-method" label="Recebimento" title="Formas de recebimento" type="RECEIPT_METHOD" registration={register("paymentMethod")} error={errors.paymentMethod?.message} onOptionCreated={(name) => setValue("paymentMethod", name, { shouldDirty: true })} />
 
         <FormField
           className="md:col-span-2"

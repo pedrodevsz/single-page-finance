@@ -6,11 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { ManagedOptionSelect } from "@/components/finance/managed-option-select";
 import { Textarea } from "@/components/ui/textarea";
 import { FormField } from "@/components/ui/form-field";
 import { MoneyInput } from "@/components/ui/money-input";
-import { paymentMethodOptions, expenseCategories } from "@/types/transaction";
 import { getLocalDateInputValue } from "@/lib/date";
 import { fixedExpenseSchema, type FixedExpenseFormValues } from "@/lib/schemas/fixed-expense.schema";
 import { useCreateFixedExpense } from "@/hooks/fixed-expenses/use-create-fixed-expense";
@@ -18,9 +17,9 @@ import { useCreateFixedExpense } from "@/hooks/fixed-expenses/use-create-fixed-e
 const defaultValues: FixedExpenseFormValues = {
     description: "",
     amountInCents: 0,
-    category: expenseCategories[0],
+    category: "Outros",
     dueDate: getLocalDateInputValue(),
-    paymentMethod: paymentMethodOptions[0].value,
+    paymentMethod: "PIX",
     notes: "",
     installments: null,
 };
@@ -63,21 +62,9 @@ export function FixedExpenseForm() {
                     <Input id="fixed-due-date" type="date" {...register("dueDate")} />
                 </FormField>
 
-                <FormField error={errors.category?.message} label="Categoria" labelFor="fixed-category">
-                    <Select id="fixed-category" {...register("category")}>
-                        {expenseCategories.map((category) => (
-                            <option key={category} value={category}>
-                                {category}
-                            </option>
-                        ))}
-                    </Select>
-                </FormField>
+                <ManagedOptionSelect id="fixed-category" label="Categoria" title="Categorias" type="EXPENSE_CATEGORY" registration={register("category")} error={errors.category?.message} onOptionCreated={(name) => form.setValue("category", name, { shouldDirty: true })} />
 
-                <FormField error={errors.paymentMethod?.message} label="Pagamento" labelFor="fixed-payment-method">
-                    <Select id="fixed-payment-method" {...register("paymentMethod")}>{paymentMethodOptions.map((m) => (
-                        <option key={m.value} value={m.value}>{m.label}</option>
-                    ))}</Select>
-                </FormField>
+                <ManagedOptionSelect id="fixed-payment-method" label="Pagamento" title="Formas de pagamento" type="PAYMENT_METHOD" registration={register("paymentMethod")} error={errors.paymentMethod?.message} onOptionCreated={(name) => form.setValue("paymentMethod", name, { shouldDirty: true })} />
 
                 <FormField className="md:col-span-2" error={errors.notes?.message} hint="Opcional" label="Observação" labelFor="fixed-notes">
                     <Textarea id="fixed-notes" placeholder="Contrato de aluguel" {...register("notes")} />

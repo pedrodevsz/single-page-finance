@@ -1,10 +1,5 @@
 import { z } from "zod";
 
-import {
-  expenseCategories,
-  incomeCategories,
-  paymentMethodOptions,
-} from "@/types/transaction";
 
 const descriptionSchema = z
   .string()
@@ -28,22 +23,13 @@ const notesSchema = z
   .trim()
   .max(255, "A observação deve ter no máximo 255 caracteres.");
 
-const paymentMethodSchema = z.enum(
-  paymentMethodOptions.map((option) => option.value) as [
-    (typeof paymentMethodOptions)[number]["value"],
-    ...(typeof paymentMethodOptions)[number]["value"][]
-  ],
-  {
-    error: () => "Selecione um meio de pagamento.",
-  }
-);
+const categorySchema = z.string().trim().min(1, "Selecione uma categoria.").max(80);
+const paymentMethodSchema = z.string().trim().min(1, "Selecione um meio de pagamento.").max(80);
 
 export const incomeSchema = z.object({
   description: descriptionSchema,
   amountInCents: amountSchema,
-  category: z.enum(incomeCategories, {
-    error: () => "Selecione uma categoria.",
-  }),
+  category: categorySchema,
   transactionDate: dateSchema,
   paymentMethod: paymentMethodSchema,
   notes: notesSchema,
@@ -52,9 +38,7 @@ export const incomeSchema = z.object({
 export const expenseSchema = z.object({
   description: descriptionSchema,
   amountInCents: amountSchema,
-  category: z.enum(expenseCategories, {
-    error: () => "Selecione uma categoria.",
-  }),
+  category: categorySchema,
   transactionDate: dateSchema,
   paymentMethod: paymentMethodSchema,
   notes: notesSchema,
