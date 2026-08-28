@@ -18,3 +18,8 @@ export const dashboardKeys = {
   evolution: (months: number) => ["dashboard", "evolution", { months }] as const,
   expensesByCategory: ["dashboard", "expenses-by-category"] as const,
 };
+
+export const financialOptionKeys = {
+  all: ["financial-options"] as const,
+  list: (type: string) => [...financialOptionKeys.all, type] as const,
+};
