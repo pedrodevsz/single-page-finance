@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import org.springframework.validation.annotation.Validated;
 
-import finance_control.api.transaction.domain.PaymentMethod;
 import finance_control.api.transaction.domain.TransactionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,8 +30,9 @@ public record CreateTransactionRequest(
         @NotNull(message = "Informe uma data.")
         LocalDate transactionDate,
 
-        @NotNull(message = "Selecione um meio de pagamento ou recebimento.")
-        PaymentMethod paymentMethod,
+        @NotBlank(message = "Selecione um meio de pagamento ou recebimento.")
+        @Size(max = 80, message = "O meio de pagamento deve ter no máximo 80 caracteres.")
+        String paymentMethod,
 
         @Size(max = 255, message = "A observação deve ter no máximo 255 caracteres.")
         String notes

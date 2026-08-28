@@ -36,7 +36,7 @@ class TransactionServiceTest {
                 150000L,
                 "Freelance",
                 LocalDate.of(2026, 8, 10),
-                PaymentMethod.PIX,
+                PaymentMethod.PIX.name(),
                 "Pagamento referente ao projeto X"
         );
 
@@ -53,7 +53,7 @@ class TransactionServiceTest {
         assertThat(savedTransaction.getAmountInCents()).isEqualTo(150000L);
         assertThat(savedTransaction.getCategory()).isEqualTo("Freelance");
         assertThat(savedTransaction.getTransactionDate()).isEqualTo(LocalDate.of(2026, 8, 10));
-        assertThat(savedTransaction.getPaymentMethod()).isEqualTo(PaymentMethod.PIX);
+        assertThat(savedTransaction.getPaymentMethod()).isEqualTo(PaymentMethod.PIX.name());
         assertThat(savedTransaction.getNotes()).isEqualTo("Pagamento referente ao projeto X");
         assertThat(response.type()).isEqualTo(TransactionType.INCOME);
     }

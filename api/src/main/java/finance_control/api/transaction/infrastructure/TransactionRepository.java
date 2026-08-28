@@ -14,6 +14,8 @@ import finance_control.api.transaction.domain.TransactionType;
 
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
     List<Transaction> findAllByType(TransactionType type, Sort sort);
+    long countByCategoryIgnoreCaseAndType(String category, TransactionType type);
+    long countByPaymentMethodIgnoreCaseAndType(String paymentMethod, TransactionType type);
 
     @Query("""
             select coalesce(sum(transaction.amountInCents), 0)

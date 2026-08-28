@@ -48,7 +48,7 @@ class TransactionControllerTest {
                 150000L,
                 "Freelance",
                 LocalDate.of(2026, 8, 10),
-                PaymentMethod.PIX,
+                PaymentMethod.PIX.name(),
                 "Pagamento referente ao projeto X",
                 Instant.parse("2026-08-10T12:00:00Z"),
                 Instant.parse("2026-08-10T12:00:00Z")

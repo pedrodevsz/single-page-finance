@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import finance_control.api.transaction.domain.PaymentMethod;
 
 public record FixedExpenseHistoryRecordResponse(
         UUID id,
@@ -15,7 +14,7 @@ public record FixedExpenseHistoryRecordResponse(
         Long amountInCents,
         boolean paid,
         Instant paidAt,
-        PaymentMethod paymentMethod,
+        String paymentMethod,
         String notes,
         Integer installmentNumber,
         Integer totalInstallments) {
