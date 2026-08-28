@@ -44,9 +44,8 @@ public class Transaction {
     @Column(nullable = false)
     private LocalDate transactionDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
-    private PaymentMethod paymentMethod;
+    @Column(nullable = false, length = 80)
+    private String paymentMethod;
 
     @Column(length = 255)
     private String notes;
@@ -68,7 +67,7 @@ public class Transaction {
             Long amountInCents,
             String category,
             LocalDate transactionDate,
-            PaymentMethod paymentMethod,
+            String paymentMethod,
             String notes
     ) {
         Transaction transaction = new Transaction();
@@ -77,7 +76,7 @@ public class Transaction {
         transaction.amountInCents = Objects.requireNonNull(amountInCents, "amountInCents");
         transaction.category = normalizeRequired(category, "category");
         transaction.transactionDate = Objects.requireNonNull(transactionDate, "transactionDate");
-        transaction.paymentMethod = Objects.requireNonNull(paymentMethod, "paymentMethod");
+        transaction.paymentMethod = normalizeRequired(paymentMethod, "paymentMethod");
         transaction.notes = normalizeOptional(notes);
         return transaction;
     }
@@ -106,7 +105,7 @@ public class Transaction {
         return transactionDate;
     }
 
-    public PaymentMethod getPaymentMethod() {
+    public String getPaymentMethod() {
         return paymentMethod;
     }
 

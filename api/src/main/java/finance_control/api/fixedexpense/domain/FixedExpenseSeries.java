@@ -9,12 +9,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import finance_control.api.fixedexpense.api.dto.CreateFixedExpenseRequest;
-import finance_control.api.transaction.domain.PaymentMethod;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,9 +34,8 @@ public class FixedExpenseSeries {
     @Column(nullable = false, length = 80)
     private String category;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
-    private PaymentMethod paymentMethod;
+    @Column(nullable = false, length = 80)
+    private String paymentMethod;
 
     @Column(length = 255)
     private String notes;
@@ -63,7 +59,7 @@ public class FixedExpenseSeries {
         series.description = normalizeRequired(request.description(), "description");
         series.amountInCents = Objects.requireNonNull(request.amountInCents(), "amountInCents");
         series.category = normalizeRequired(request.category(), "category");
-        series.paymentMethod = Objects.requireNonNull(request.paymentMethod(), "paymentMethod");
+        series.paymentMethod = normalizeRequired(request.paymentMethod(), "paymentMethod");
         series.notes = normalizeOptional(request.notes());
         series.installments = request.installments();
         return series;
@@ -73,7 +69,7 @@ public class FixedExpenseSeries {
     public String getDescription() { return description; }
     public Long getAmountInCents() { return amountInCents; }
     public String getCategory() { return category; }
-    public PaymentMethod getPaymentMethod() { return paymentMethod; }
+    public String getPaymentMethod() { return paymentMethod; }
     public String getNotes() { return notes; }
     public Integer getInstallments() { return installments; }
     public Instant getCreatedAt() { return createdAt; }
