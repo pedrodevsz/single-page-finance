@@ -1,9 +1,9 @@
 package finance_control.api.fixedexpense.api.dto;
 
-import finance_control.api.transaction.domain.PaymentMethod;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
@@ -12,7 +12,7 @@ public record CreateFixedExpenseRequest(
         @NotNull Long amountInCents,
         @NotBlank String category,
         @NotNull LocalDate dueDate,
-        @NotNull PaymentMethod paymentMethod,
+        @NotBlank @Size(max = 80) String paymentMethod,
         String notes,
         Integer installments) {
 }

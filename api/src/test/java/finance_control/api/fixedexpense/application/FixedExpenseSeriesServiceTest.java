@@ -60,7 +60,7 @@ class FixedExpenseSeriesServiceTest {
 
         var request = new CreateFixedExpenseRequest(
                 "Aluguel", 40_000L, "Moradia", LocalDate.of(2026, 8, 22),
-                PaymentMethod.PIX, null, null);
+                PaymentMethod.PIX.name(), null, null);
 
         var response = new FixedExpenseSeriesService(seriesRepository, installmentRepository).create(request);
 

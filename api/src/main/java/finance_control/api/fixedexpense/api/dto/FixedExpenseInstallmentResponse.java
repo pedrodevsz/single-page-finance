@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import finance_control.api.fixedexpense.domain.FixedExpenseInstallment;
-import finance_control.api.transaction.domain.PaymentMethod;
 
 public record FixedExpenseInstallmentResponse(
         UUID id,
@@ -14,7 +13,7 @@ public record FixedExpenseInstallmentResponse(
         String category,
         Long amountInCents,
         LocalDate dueDate,
-        PaymentMethod paymentMethod,
+        String paymentMethod,
         String notes,
         Integer installmentNumber,
         Integer totalInstallments,

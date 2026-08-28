@@ -83,7 +83,7 @@ class FixedExpenseInstallmentServiceTest {
         UUID id = UUID.randomUUID();
         LocalDate dueDate = LocalDate.of(2026, 10, 25);
         FixedExpenseSeries series = FixedExpenseSeries.create(new CreateFixedExpenseRequest(
-                "Internet", 9_900L, "Serviços", dueDate, PaymentMethod.PIX, null, 9));
+                "Internet", 9_900L, "Serviços", dueDate, PaymentMethod.PIX.name(), null, 9));
         FixedExpenseInstallment installment = FixedExpenseInstallment.create(series, 3, dueDate);
         when(repository.findById(id)).thenReturn(Optional.of(installment));
 

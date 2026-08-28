@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import finance_control.api.transaction.domain.PaymentMethod;
 import finance_control.api.transaction.domain.Transaction;
 import finance_control.api.transaction.domain.TransactionType;
 
@@ -15,7 +14,7 @@ public record TransactionResponse(
         Long amountInCents,
         String category,
         LocalDate transactionDate,
-        PaymentMethod paymentMethod,
+        String paymentMethod,
         String notes,
         Instant createdAt,
         Instant updatedAt
